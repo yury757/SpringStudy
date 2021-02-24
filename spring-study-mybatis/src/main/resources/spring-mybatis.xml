@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 使用spring数据源代替mybatis数据源 -->
+    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mybatis?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true&amp;serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+    <!-- sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <!-- 绑定mybatis配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 一般这里只需要绑定配置文件就可以，mybatis的配置还是在mybatis-config.xml中配置 -->
+    </bean>
+
+    <!-- 这个sqlSessionTemplate是SqlSession的一个实现类，我们以后就不用手动调用openSession()方法来获得SqlSession对象 -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <!-- 因为这个类没有setter方法，所以只能通过有参构造方法来初始化 -->
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 声明式事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource"/>
+    </bean>
+
+    <!-- 结合AOP实现事务织入 -->
+    <!-- 配置事务通知的的类：需要导入tx命名空间 -->
+    <tx:advice id="txAdvisor" transaction-manager="transactionManager">
+        <!-- name：给哪些方法配置事务，propagation：配置事务的传播特性 -->
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="select*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置事务的切入点 -->
+    <aop:config>
+        <aop:pointcut id="txPointCut" expression="execution(* org.yuyr757.mapper.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvisor" pointcut-ref="txPointCut"/>
+    </aop:config>
+</beans>

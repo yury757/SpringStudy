@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 使用spring来创建对象，在spring中，这些对象都叫做bean -->
+    <!-- id：唯一id -->
+    <!-- class：需要new的类型 -->
+    <!-- property：对象的属性 -->
+    <!-- property.name：对象属性名 -->
+    <!-- property.value：对象属性设置值 -->
+    <bean id="hello" class="org.yuyr757.pojo.Hello">
+        <property name="str" value="spring_value"/>
+    </bean>
+
+    <bean id="userDao" class="org.yuyr757.Dao.UserDaoImpl"/>
+    <bean id="userDaoMysql" class="org.yuyr757.Dao.UserDaoMysqlImpl"/>
+    <bean id="userDaoOracle" class="org.yuyr757.Dao.UserDaoOracleImpl"/>
+
+    <bean id="userService" class="org.yuyr757.services.UserServiceImpl">
+        <!-- ref：引用某一个对象，使用这里的id引用。value：具体的值 -->
+        <property name="userDao" ref="userDao"/>
+    </bean>
+    <bean id="userServiceMysql" class="org.yuyr757.services.UserServiceImpl">
+        <property name="userDao" ref="userDaoMysql"/>
+    </bean>
+    <bean id="userServiceOracle" class="org.yuyr757.services.UserServiceImpl">
+        <property name="userDao" ref="userDaoOracle"/>
+    </bean>
+
+    <!-- 无参构造，再调用相应属性的setter方法 -->
+    <bean id="user1" class="org.yuyr757.pojo.User">
+        <property name="id" value="1"/>
+        <property name="name" value="test_user_name1"/>
+    </bean>
+
+    <!-- 有参构造，使用构造方法参数下标 -->
+    <bean id="user2" class="org.yuyr757.pojo.User">
+        <constructor-arg index="0" value="2"/>
+        <constructor-arg index="1" value="test_user_name2"/>
+    </bean>
+
+    <!-- 有参构造，使用构造方法参数类型 -->
+    <!-- 不建议使用 -->
+    <bean id="user3" class="org.yuyr757.pojo.User">
+        <constructor-arg type="int" value="3"/>
+        <constructor-arg type="java.lang.String" value="test_user_name3"/>
+    </bean>
+
+    <!-- 有参构造，使用构造方法参数参数名 -->
+    <bean id="user4" class="org.yuyr757.pojo.User">
+        <constructor-arg name="id" value="4"/>
+        <constructor-arg name="name" value="test_user_name4"/>
+    </bean>
+
+    <!-- =================== 别名测试 =================== -->
+    <alias name="user3" alias="testuser33333"/>
+</beans>

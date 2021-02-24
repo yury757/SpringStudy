@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 以上加入这个这个拓展标签 -->
+    <!-- xmlns:p="http://www.springframework.org/schema/p" -->
+    <!-- 加入这个标签后可以直接在后面使用 p:属性名 来定义属性 -->
+    <bean id="user5" class="org.yuyr757.pojo.User" p:id="5" p:name="user_test_5"/>
+
+    <!-- 以上加入这个这个拓展标签 -->
+    <!-- xmlns:p="http://www.springframework.org/schema/c" -->
+    <!-- 加入这个标签后可以直接在后面使用 c:属性名/下标 来定义构造方法的参数的值 -->
+    <bean id="user6" class="org.yuyr757.pojo.User" c:id="6" c:name="user_test_6"/>
+    <bean id="user7" class="org.yuyr757.pojo.User" c:_0="7" c:_1="user_test_7"/>
+
+    <!-- 测试scope，默认是singleton，单例 -->
+    <bean id="user8" class="org.yuyr757.pojo.User" c:_0="8" c:_1="user_test_7"/>
+    <bean id="user9" class="org.yuyr757.pojo.User" c:_0="9" c:_1="user_test_7" scope="prototype"/>
+    <bean id="user10" class="org.yuyr757.pojo.User" c:_0="10" c:_1="user_test_7" scope="prototype"/>
+
+</beans>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 测试特别复杂类型的注入 -->
+    <bean id="student" class="org.yuyr757.pojo.Student">
+        <!-- 普通值，value -->
+        <property name="name" value="yuyr757"/>
+
+        <!-- bean注入，ref -->
+        <property name="address" ref="address"/>
+
+        <!-- 数组注入，array -->
+        <property name="books">
+            <array>
+                <value>红楼梦</value>
+                <value>水浒传</value>
+                <value>西游记</value>
+                <value>三国演义</value>
+            </array>
+        </property>
+
+        <!-- 列表注入，list -->
+        <property name="hobbies">
+            <list>
+                <value>听歌</value>
+                <value>写代码</value>
+                <value>看电影</value>
+            </list>
+        </property>
+
+        <!-- 映射表注入，map -->
+        <property name="card">
+            <map>
+                <entry key="身份证" value="111111111111111111"/>
+                <entry key="银行卡" value="222222222222222222"/>
+            </map>
+        </property>
+
+        <!-- 集合注入，set -->
+        <property name="games">
+            <set>
+                <value>魂斗罗</value>
+                <value>冒险岛</value>
+                <value>七龙珠</value>
+            </set>
+        </property>
+
+        <!-- null注入，null -->
+        <property name="wife">
+            <null/>
+        </property>
+
+        <!-- properties对象注入，props，注意和map的区别 -->
+        <property name="info">
+            <props>
+                <prop key="学号">U201300001</prop>
+                <prop key="性别">男</prop>
+                <prop key="username">root</prop>
+                <prop key="password">root</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="address" class="org.yuyr757.pojo.Address">
+        <property name="address" value="我是一个地址"/>
+    </bean>
+
+</beans>

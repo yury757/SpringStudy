@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 配置spring bean -->
+    <bean id="userServiceImpl" class="org.yuyr757.services.UserServiceImpl"/>
+    <bean id="logBefore" class="org.yuyr757.log.BeforeLog"/>
+    <bean id="logAfter" class="org.yuyr757.log.AfterLog"/>
+    <bean id="diyPoint" class="org.yuyr757.DiyAop.DiyPointCut"/>
+    <bean id="diyPoint2" class="org.yuyr757.DiyAop.DiyPointCut2"/>
+
+    <!-- 配置AOP -->
+    <!-- 方式一：使用原生spring aop的api接口 -->
+<!--    <aop:config>-->
+<!--        &lt;!&ndash; 配置切入点，即需要增强的目方法 &ndash;&gt;-->
+<!--        &lt;!&ndash; expression：表达式，execution(要执行的位置，修饰词 返回值 列名 方法名 参数) &ndash;&gt;-->
+<!--        <aop:pointcut id="pointcut" expression="execution(* org.yuyr757.services.UserServiceImpl.*(..))"/>-->
+
+<!--        &lt;!&ndash; 执行环绕增加 &ndash;&gt;-->
+<!--        <aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"/>-->
+<!--        <aop:advisor advice-ref="logAfter" pointcut-ref="pointcut"/>-->
+<!--    </aop:config>-->
+
+    <!-- 方式二：使用自定义类来实现aop -->
+    <aop:config>
+    <!-- 需要配置切面 -->
+        <aop:aspect ref="diyPoint">
+            <aop:pointcut id="point" expression="execution(* org.yuyr757.services.UserServiceImpl.*(..))"/>
+            <aop:before method="before" pointcut-ref="point"/>
+            <aop:after-returning method="afterReturning" pointcut-ref="point"/>
+            <aop:after-throwing method="afterThrowing" pointcut-ref="point"/>
+<!--            <aop:around method="around" pointcut-ref="point"/>-->
+            <aop:after method="after" pointcut-ref="point"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!-- 方式三：使用自定义+注解 -->
+<!--    <aop:aspectj-autoproxy proxy-target-class="false"/>-->
+</beans>

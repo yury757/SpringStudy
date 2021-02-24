@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dog" class="org.yuyr757.pojo.Dog"/>
+    <bean id="cat" class="org.yuyr757.pojo.Cat"/>
+<!--    <bean id="cat2" class="org.yuyr757.pojo.Cat"/>-->
+
+    <!-- byName：在容器中自动查找对应属性的setter方法名中set后面的值相同的bean的id -->
+    <bean id="people1" class="org.yuyr757.pojo.People" autowire="byName">
+        <property name="name" value="这是我的名字1"/>
+    </bean>
+    <!-- byType：在容器中自动查找对应属性类型相同的bean -->
+    <!-- 当容器中有两个相同类型的对象时，不能使用byType -->
+    <bean id="people2" class="org.yuyr757.pojo.People" autowire="byType">
+        <property name="name" value="这是我的名字2"/>
+    </bean>
+
+    <bean id="people3" class="org.yuyr757.pojo.People">
+        <property name="name" value="这是我的名字3"/>
+    </bean>
+
+</beans>
